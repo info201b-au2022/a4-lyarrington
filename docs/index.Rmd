@@ -1,45 +1,76 @@
 ---
-title: "Your A4 Report Title (TODO: Revise title)"
-author: "Your Name"
-date: '2022-11-01'
+title: "A Visualization at Systematic Racism in the U.S. Prison System"
+author: "Lauren Yarrington"
+date: '2022-11-19'
 output: html_document
 ---
 
-```{r echo=FALSE, eval=TRUE, message=FALSE}
+```{r echo=FALSE}
 source("../source/a4-helpers.R")
 source("../source/analysis.R")
 ```
 
+
 ## Abstract 
-[TODO: Include a short abstract (about 50 words)]
-
-# Test (TODO: Remove before submission!!)
-```{r echo=FALSE}
-q1_string <- test_query1()
-num <- 5
-```
-As you know, this is a markdown report. The [R Markdown Cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf) is **useful!**
-
-* Here's a test of a dynamic variable. Say **"`r q1_string`!!!** 
-* Here's another test. A vector
-of numbers: `r test_query2(num)`.
-
-Recall that _{r echo=TRUE}_ can be used to display the code, 
-which is very useful when developing and debugging a report. Here's an example: 
-
-```{r echo=TRUE}
-num <- 5
-sum <- sum(test_query2(num))
-print(sum)
-```
+A prison sentence is a major life change that can have a lasting effect on both the people in your community and your future. Prison has an impact on both the prisoner and the community in which they live. However, individuals of color and black Americans are disproportionately affected.
 
 ## Introduction 
-[TODO]
+This data set highlights the social and political structures that make up the United States prison system. The millions of Americans that are incarcerated are help in overcrowded and inhuman prisons that do not provide adequate treatment to all those held inside. To make matters even worse, the prison treatment is a vessel for racism in America. With Black Americans being incarcerated at a rate five times greater than the incarceration rate for White Americans, it is no surprise that the United States prison system is one of the sharpest manifestations of racism in America. Many factors are to blame for the disproportionate incarceration of people of color, including the over policing of people of color and the war on drugs to name a few. By making this data set public so that anyone on the internet can access the data, the Vera Institute wants the data to be seen by as many people as possible to spread awareness about the racism occurring in the US prison systems. 
 
 ## Data Summary 
-[TODO]
 
-[TODO ... other sections ... See Canvas for details]
+```{r echo=FALSE}
+total_1990_white <- format(total_1990_white, big.mark = ",", scientific = FALSE)
+total_1990_black <- format(total_1990_black, big.mark = ",", scientific = FALSE)
+total_2018_white <- format(total_2018_white, big.mark = ",", scientific = FALSE)
+total_2018_black <- format(total_2018_black, big.mark = ",", scientific = FALSE)
+increase_white <- format(increase_white, big.mark = ",", scientific = FALSE)
+increase_black <- format(increase_black, big.mark = ",", scientific = FALSE)
 
-_All the very best with your work!_
+```  
+
+After looking at the data, it is clear that there is inequity amoungst different races when in comes to incarceration rates. One of these being the amount on Americans incarcerated being disproportionately black as time went on. As we can see from the data, in 1990, there were **`r total_1990_white`** White people in the prisons and **`r total_1990_black`** Black people. However, by 2018, the number of Black people incarceration increased significantly while the number of White people in prison stayed relatively the same. Calculated from the data, we can see how in 2018, the number of White people in prisons was **`r total_2018_white`** and **`r total_2018_black`** Black people in prisons. This meant that there was an increase of **`r increase_black`** Black people in prison in 38 years while only an increase of **`r increase_white`** White people in prison. This data clearly shows a large disparity between the increasing incarceration rates between the Black population and White population.
+
+## Growth of the U.S. Prison Population
+
+```{r echo=FALSE}
+plot(plot_jail_pop_for_us())
+```  
+
+*Increase of Jail Population in U.S. (1970 - 2018). The chart shows how the total jail population has increased throughout the past 48 years in the U.S.*
+
+
+This chart answers the question: how has the overall jail population in the U.S. changed in the past 48 years? The bar graph reveals the overall increase in jail population from the year 1970 to the year 2018. The chart displays a relatively stable time period during the first nine years when the was hardly any change in the jail population. From the years 1979 to 2008 the jail population slowly increases every year until 2009 when there is an overall slight decline in the jail population. 
+
+## Growth of Prison Population by State 
+
+```{r echo=FALSE}
+plot(plot_jail_pop_by_states(c("CA", "WA", "OR", "FL")))
+```  
+
+*Increase of Jail Population in U.S. by State (1970 - 2018). The chart shows how the total jail population has increased throughout the past 48 years in the U.S. for the states California, Washington, Oregon, and Florida*
+
+
+This chart answers the question: how has the change in jail population in the U.S.  in the past 48 years differentiated between various states? The bar graph reveals the overall increase in jail population from the year 1970 to the year 2018 for four different states. The chart displays a sharp increase in jail population for the state of California and slightly smaller sharp increase in the state of Florida. However, in the states of Washington and Oregon, there is only a slight increase of about 7,000 in the jail population. 
+
+## Growth in Jail Population of Various Races in U.S. 
+
+````{r echo=FALSE}
+plot(plot_race_jail_pop())
+```  
+
+*Increase of Jail Population in U.S. of Various Races (1985 - 2018). The chart shows how the total jail population has increased throughout the past 35 years in the U.S. for the White, Black, Latinx, AAPI, and Native jail population*
+
+
+This chart answers the question: how has the total jail population changed in the past 35 years for various races? The chart displays the overall increase of the jail population for every race, which is expected as there has been an increase in the human population in the past 35 years. However, something that wasn't expected is how during the years 1989 to 1999, there was a higher Black jail population even though the US have historically had an overwhelming White majority. The high number of Black jail population can be a cause of various factors including the war on drugs and over policing of Black people. 
+
+## Percentage of POC in Jail Across the U.S.
+
+```{r echo=FALSE}
+plot(plot_map())
+```  
+
+*Geographical map of the percentage of total POC population that are incarcerated across the U.S. in the year 2018. The graph represents the percentage of the AAPI, Black, Latinx, and Native population that are in Jail.*
+
+This chart answers the question: which parts of the U.S. have a high percentage of POC in jail? There are various part in the United States where if you are a person of color, you have a higher risk of being incarcerated. This can be a result of over policing of people of color in various areas across the US. Another factor that result in a high percentage of POC in jail can be systematic racism in law enforcement. Many statistics point in favor of law enforcement being systematically racist, such as evidence that a Black person is five times as likely to be stopped without just cause as a white person. The map above demonstrates how different pockets in the U.S. have a higher chance on incarcerating a person of color. These places include the state of Louisiana, the northern part of the Midwest, and various parts of the Southeast. However, there is an error in the data in that in some parts of the U.S. the percentage in over 100%. This is due to the only available data about the overall population's race is for people between the ages 15 to 64. The skews the data as the data for the total population in each state is smaller that it is in reality. 
 
