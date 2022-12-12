@@ -1,27 +1,13 @@
 library(tidyverse)
 library(dplyr)
 library(usdata)
+library(ggplot2)
 
 # The functions might be useful for A4
 setwd("~/Documents/info201/assignments/a4-lyarrington/")
 source("~/Documents/info201/assignments/a4-lyarrington//source/a4-helpers.R")
 
 incarceration_df <- read.csv("incarceration_trends.csv")
-
-## Test queries ----
-#----------------------------------------------------------------------------#
-# Simple queries for basic testing
-#----------------------------------------------------------------------------#
-# Return a simple string
-test_query1 <- function() {
-  return ("Hello world")
-}
-
-# Return a vector of numbers
-test_query2 <- function(num=6) {
-  v <- seq(1:num)
-  return(v)
-}
 
 ## Section 2  ---- 
 #----------------------------------------------------------------------------#
@@ -56,9 +42,7 @@ increase_black <- total_2018_black - total_1990_black
 ## Section 3  ---- 
 #----------------------------------------------------------------------------#
 # Growth of the U.S. Prison Population
-# Your functions might go here ... <todo:  update comment>
-#----------------------------------------------------------------------------#
-# This function ... <todo:  update comment>
+
 get_year_jail_pop <- function() {
   df <- incarceration_df %>% 
     select(year, total_jail_pop) %>% 
@@ -68,7 +52,6 @@ get_year_jail_pop <- function() {
   return(df)   
 }
 
-# This function ... <todo:  update comment>
 plot_jail_pop_for_us <- function()  {
   bar_chart <- ggplot(get_year_jail_pop(), aes(year, total)) +
     geom_bar(stat='identity') +
@@ -77,6 +60,8 @@ plot_jail_pop_for_us <- function()  {
     ggtitle("Increase of Jail Population in U.S. (1970-2018)")
   return(bar_chart)   
 }
+
+#----------------------------------------------------------------------------#
 
 ## Section 4  ---- 
 #----------------------------------------------------------------------------#
@@ -132,99 +117,55 @@ plot_jail_pop_by_states <- function(states) {
   return(line_chart)
 }
 
-# Your functions might go here ... <todo:  update comment>
-# See Canvas
 #----------------------------------------------------------------------------#
 
 ## Section 5  ---- 
 #----------------------------------------------------------------------------#
-# Increase in Various Races in Jail Population in U.S. 
+# White vs. Black Jail Population by State in 2018
 
-get_white_jail_pop <- function() {
+get_black_jail_pop_by_state <- function() {
   df <- incarceration_df %>% 
-    select(year, white_jail_pop) %>% 
-    drop_na()
-  df <- aggregate(df$white_jail_pop, list(df$year), sum)
-  df$Race <- "White"
-  colnames(df)[1] <- "Year"
-  colnames(df)[2] <- "Total"
-  df <- subset(df, Total > 0)
-  return(df)   
+    select(year, state, black_jail_pop) %>% 
+    drop_na() %>% 
+    filter(year == 2018) 
+  df <- aggregate(df$black_jail_pop, list(df$state), sum)
+  colnames(df)[1] <- "State"
+  colnames(df)[2] <- "Black_Pop"
+  return(df)
 }
 
-get_black_jail_pop <- function() {
+get_white_jail_pop_by_state <- function() {
   df <- incarceration_df %>% 
-    select(year, black_jail_pop) %>% 
-    drop_na()
-  df <- aggregate(df$black_jail_pop, list(df$year), sum)
-  df$Race <- "Black"
-  colnames(df)[1] <- "Year"
-  colnames(df)[2] <- "Total"
-  df <- subset(df, Total > 0)
-  return(df)   
+    select(year, state, white_jail_pop) %>% 
+    drop_na() %>% 
+    filter(year == 2018) 
+  df <- aggregate(df$white_jail_pop, list(df$state), sum)
+  colnames(df)[1] <- "State"
+  colnames(df)[2] <- "White_Pop"
+  return(df)
 }
 
-get_latinx_jail_pop <- function() {
-  df <- incarceration_df %>% 
-    select(year, latinx_jail_pop) %>% 
-    drop_na()
-  df <- aggregate(df$latinx_jail_pop, list(df$year), sum)
-  df$Race <- "Latinx"
-  colnames(df)[1] <- "Year"
-  colnames(df)[2] <- "Total"
-  df <- subset(df, Total > 0)
-  return(df)   
-}
-
-get_aapi_jail_pop <- function() {
-  df <- incarceration_df %>% 
-    select(year, aapi_jail_pop) %>% 
-    drop_na()
-  df <- aggregate(df$aapi_jail_pop, list(df$year), sum)
-  df$Race <- "AAPI"
-  colnames(df)[1] <- "Year"
-  colnames(df)[2] <- "Total"
-  df <- subset(df, Total > 0)
-  return(df)   
-}
-
-get_native_jail_pop <- function() {
-  df <- incarceration_df %>% 
-    select(year, native_jail_pop) %>% 
-    drop_na()
-  df <- aggregate(df$native_jail_pop, list(df$year), sum)
-  df$Race <- "Native"
-  colnames(df)[1] <- "Year"
-  colnames(df)[2] <- "Total"
-  df <- subset(df, Total > 0)
-  return(df)   
-}
-
-get_race_jail_pop <- function() {
-  df <- full_join(get_white_jail_pop(), get_black_jail_pop())
-  df <- full_join(df, get_latinx_jail_pop())
-  df <- full_join(df, get_aapi_jail_pop())
-  df <- full_join(df, get_native_jail_pop())
+get_jail_pop_by_state <- function() {
+  df <- inner_join(get_black_jail_pop_by_state(), get_white_jail_pop_by_state(), by = 'State')
   return(df)
 }
 
 plot_race_jail_pop <- function() {
-  p <- ggplot(get_race_jail_pop(), aes (x = Year, y = Total, fill = Race)) +
-    geom_bar(stat = "identity",
-             position = "dodge") +
-    ggtitle("Increase in White and Black Jail Population in U.S. (1970-2018)") +
-    xlab("Year") +
-    ylab("Total Jail Population")
+  df <- get_jail_pop_by_state()
+  p <- ggplot(df, aes (x = White_Pop, y = Black_Pop, fill = State)) +
+    geom_point() +
+    geom_text(label=df$State, hjust=1, vjust=-0.5, size = 2.5) +
+    theme(legend.position="none") +
+    ggtitle("White vs. Black Jail Population by State in 2018") +
+    xlab("White Jail Population") +
+    ylab("Black Jail Population")
   return(p)
-}
+} 
 
-# Your functions might go here ... <todo:  update comment>
-# See Canvas
 #----------------------------------------------------------------------------#
 
 ## Section 6  ---- 
 #----------------------------------------------------------------------------#
-# <a map shows potential patterns of inequality that vary geographically>
 
 get_poc_jail_percentage <- function() {
   main_states <- map_data("state")
@@ -259,11 +200,4 @@ plot_map <- function() {
   return(map)
 }
 
-
-# Your functions might go here ... <todo:  update comment>
-# See Canvas
 #----------------------------------------------------------------------------#
-
-## Load data frame ---- 
-
-

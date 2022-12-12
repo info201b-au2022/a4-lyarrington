@@ -5,7 +5,7 @@ date: '2022-11-19'
 output: html_document
 ---
 
-```{r echo=FALSE}
+```{r echo=FALSE, results='hide',message=FALSE}
 source("../source/a4-helpers.R")
 source("../source/analysis.R")
 ```
@@ -19,7 +19,7 @@ This data set highlights the social and political structures that make up the Un
 
 ## Data Summary 
 
-```{r echo=FALSE}
+```{r echo=FALSE, results='hide',message=FALSE}
 total_1990_white <- format(total_1990_white, big.mark = ",", scientific = FALSE)
 total_1990_black <- format(total_1990_black, big.mark = ",", scientific = FALSE)
 total_2018_white <- format(total_2018_white, big.mark = ",", scientific = FALSE)
@@ -33,7 +33,7 @@ After looking at the data, it is clear that there is inequity amoungst different
 
 ## Growth of the U.S. Prison Population
 
-```{r echo=FALSE}
+```{r echo=FALSE, results='hide',message=FALSE}
 plot(plot_jail_pop_for_us())
 ```  
 
@@ -44,7 +44,7 @@ This chart answers the question: how has the overall jail population in the U.S.
 
 ## Growth of Prison Population by State 
 
-```{r echo=FALSE}
+```{r echo=FALSE, results='hide',message=FALSE}
 plot(plot_jail_pop_by_states(c("CA", "WA", "OR", "FL")))
 ```  
 
@@ -55,18 +55,18 @@ This chart answers the question: how has the change in jail population in the U.
 
 ## Growth in Jail Population of Various Races in U.S. 
 
-````{r echo=FALSE}
+````{r echo=FALSE, results='hide',message=FALSE}
 plot(plot_race_jail_pop())
 ```  
 
-*Increase of Jail Population in U.S. of Various Races (1985 - 2018). The chart shows how the total jail population has increased throughout the past 35 years in the U.S. for the White, Black, Latinx, AAPI, and Native jail population*
+*White vs. Black Jail Population by State in 2018. The chart shows the total White jail population compared to the total Black jail population in every state in the US. *
 
 
-This chart answers the question: how has the total jail population changed in the past 35 years for various races? The chart displays the overall increase of the jail population for every race, which is expected as there has been an increase in the human population in the past 35 years. However, something that wasn't expected is how during the years 1989 to 1999, there was a higher Black jail population even though the US have historically had an overwhelming White majority. The high number of Black jail population can be a cause of various factors including the war on drugs and over policing of Black people. 
+This chart answers the question: which state has the highest White jail population as well as which state has the highest Black jail population? The chart also shows the comparison of the two populations. This helps to visualize which states are have a higher population of black people in jail and can summarizes patterns of inequality. For example, the state of Georgia has an extremely high Black jail population of about 22,000 people while there are only about 17,500 White people in Jail in Georgia. This inequality can be a cause of various factors including the war on drugs and over policing of Black people. 
 
 ## Percentage of POC in Jail Across the U.S.
 
-```{r echo=FALSE}
+```{r echo=FALSE, results='hide',message=FALSE}
 plot(plot_map())
 ```  
 
